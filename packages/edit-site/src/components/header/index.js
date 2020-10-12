@@ -26,12 +26,16 @@ import UndoButton from './undo-redo/undo';
 import RedoButton from './undo-redo/redo';
 import DocumentActions from './document-actions';
 import NavigationToggle from './navigation-toggle';
+import TemplateDetails from '../template-details';
+import { getTemplateInfo } from '../../utils';
 
 export default function Header( { openEntitiesSavedStates } ) {
 	const {
 		deviceType,
 		hasFixedToolbar,
 		template,
+		templatePart,
+		templateType,
 		isNavigationOpen,
 		isInserterOpen,
 	} = useSelect( ( select ) => {
@@ -39,16 +43,26 @@ export default function Header( { openEntitiesSavedStates } ) {
 			__experimentalGetPreviewDeviceType,
 			isFeatureActive,
 			getTemplateId,
+			getTemplatePartId,
+			getTemplateType,
 			isNavigationOpened,
 			isInserterOpened,
 		} = select( 'core/edit-site' );
 		const { getEntityRecord } = select( 'core' );
 
-		const _templateId = getTemplateId();
+		const templatePartId = getTemplatePartId();
+		const templateId = getTemplateId();
+
 		return {
 			deviceType: __experimentalGetPreviewDeviceType(),
 			hasFixedToolbar: isFeatureActive( 'fixedToolbar' ),
-			template: getEntityRecord( 'postType', 'wp_template', _templateId ),
+			template: getEntityRecord( 'postType', 'wp_template', templateId ),
+			templatePart: getEntityRecord(
+				'postType',
+				'wp_template_part',
+				templatePartId
+			),
+			templateType: getTemplateType(),
 			isNavigationOpen: isNavigationOpened(),
 			isInserterOpen: isInserterOpened(),
 		};
@@ -63,6 +77,11 @@ export default function Header( { openEntitiesSavedStates } ) {
 	const isLargeViewport = useViewportMatch( 'medium' );
 	const displayBlockToolbar =
 		! isLargeViewport || deviceType !== 'Desktop' || hasFixedToolbar;
+
+	let { title } = getTemplateInfo( template );
+	if ( 'wp_template_part' === templateType ) {
+		title = templatePart?.slug;
+	}
 
 	return (
 		<div className="edit-site-header">
@@ -102,7 +121,18 @@ export default function Header( { openEntitiesSavedStates } ) {
 			</div>
 
 			<div className="edit-site-header_center">
-				<DocumentActions template={ template } />
+				<DocumentActions
+					entityTitle={ title }
+					entityLabel={
+						templateType === 'wp_template'
+							? 'template'
+							: 'template part'
+					}
+				>
+					{ templateType === 'wp_template' && (
+						<TemplateDetails template={ template } />
+					) }
+				</DocumentActions>
 			</div>
 
 			<div className="edit-site-header_end">
