@@ -1,5 +1,8 @@
 .edit-site-template-details {
 	margin: 0 $grid-unit-10;
+	.edit-site-template-details__detail {
+		margin: $grid-unit-10 0;
+	}
 }
 
 .edit-site-template-details__heading {

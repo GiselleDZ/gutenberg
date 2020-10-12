@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
+import { __experimentalText as Text } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -21,22 +22,28 @@ export default function TemplateDetails( { template } ) {
 			</p>
 
 			{ title && (
-				<p>
+				<Text
+					variant="body"
+					className="edit-site-template-details__detail"
+				>
 					{ sprintf(
 						/* translators: %s: Name of the template. */
 						__( 'Name: %s' ),
 						title
 					) }
-				</p>
+				</Text>
 			) }
 			{ description && (
-				<p>
+				<Text
+					variant="body"
+					className="edit-site-template-details__detail"
+				>
 					{ sprintf(
 						/* translators: %s: Description of the template. */
 						__( 'Description: %s' ),
 						description
 					) }
-				</p>
+				</Text>
 			) }
 		</div>
 	);
