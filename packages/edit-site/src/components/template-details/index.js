@@ -17,9 +17,12 @@ export default function TemplateDetails( { template } ) {
 
 	return (
 		<div className="edit-site-template-details">
-			<p className="edit-site-template-details__heading">
+			<Text
+				variant="sectionheading"
+				className="edit-site-template-details__heading"
+			>
 				{ __( 'Template details' ) }
-			</p>
+			</Text>
 
 			{ title && (
 				<Text
