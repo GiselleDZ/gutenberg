@@ -12,7 +12,12 @@ import {
 	getBlockType,
 } from '@wordpress/blocks';
 import { useSelect } from '@wordpress/data';
-import { Dropdown, Button, VisuallyHidden } from '@wordpress/components';
+import {
+	Dropdown,
+	Button,
+	VisuallyHidden,
+	__experimentalText as Text,
+} from '@wordpress/components';
 import { chevronDown } from '@wordpress/icons';
 import { useRef } from '@wordpress/element';
 
@@ -79,17 +84,14 @@ export default function DocumentActions( { template } ) {
 							<VisuallyHidden>
 								{ __( 'Edit template:' ) }
 							</VisuallyHidden>
-							<div
-								className={ classnames(
-									'edit-site-document-actions__title',
-									{
-										'is-active': isTitleActive,
-										'is-secondary-title-active': isActive,
-									}
-								) }
+							<Text
+								variant={
+									isTitleActive ? 'subtitle.small' : 'body'
+								}
+								className="edit-site-document-actions__title"
 							>
 								{ documentTitle }
-							</div>
+							</Text>
 						</h1>
 						{ ! isActive && (
 							<Dropdown
@@ -114,16 +116,12 @@ export default function DocumentActions( { template } ) {
 						) }
 					</div>
 
-					<div
-						className={ classnames(
-							'edit-site-document-actions__secondary-item',
-							{
-								'is-secondary-title-active': isActive,
-							}
-						) }
+					<Text
+						variant={ isActive ? 'subtitle.small' : 'body' }
+						className="edit-site-document-actions__secondary-item"
 					>
 						{ label ?? '' }
-					</div>
+					</Text>
 				</>
 			) : (
 				__( 'Loading…' )
