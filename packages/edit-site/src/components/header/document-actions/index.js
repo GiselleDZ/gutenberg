@@ -107,8 +107,11 @@ export default function DocumentActions( { template } ) {
 										label={ __( 'Show template details' ) }
 									/>
 								) }
-								renderContent={ () => (
-									<TemplateDetails template={ template } />
+								renderContent={ ( { onClose } ) => (
+									<TemplateDetails
+										template={ template }
+										onClose={ onClose }
+									/>
 								) }
 							/>
 						) }
