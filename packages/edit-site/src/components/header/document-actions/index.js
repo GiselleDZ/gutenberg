@@ -93,6 +93,7 @@ export default function DocumentActions( { template } ) {
 						</h1>
 						{ ! isActive && (
 							<Dropdown
+								contentClassName="edit-site-document-actions__info-dropdown"
 								popoverProps={ {
 									anchorRef: titleRef.current,
 								} }
