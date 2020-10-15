@@ -7,6 +7,7 @@ import { View } from 'react-native';
  */
 import {
 	InnerBlocks,
+	BlockControls,
 	__experimentalAlignmentHookSettingsProvider as AlignmentHookSettingsProvider,
 } from '@wordpress/block-editor';
 import { withSelect, withDispatch } from '@wordpress/data';
@@ -14,12 +15,14 @@ import { compose, useResizeObserver } from '@wordpress/compose';
 import { createBlock } from '@wordpress/blocks';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { debounce } from 'lodash';
+import { ToolbarGroup, ToolbarItem } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import { name as buttonBlockName } from '../button/';
 import styles from './editor.scss';
+import ContentJustificationDropdown from './content-justification-dropdown';
 
 const ALLOWED_BLOCKS = [ buttonBlockName ];
 const BUTTONS_TEMPLATE = [ [ 'core/button' ] ];
@@ -31,8 +34,9 @@ function ButtonsEdit( {
 	onAddNextButton,
 	shouldDelete,
 	isInnerButtonSelected,
+	setAttributes,
 } ) {
-	const { align } = attributes;
+	const { contentJustification } = attributes;
 	const [ resizeObserver, sizes ] = useResizeObserver();
 	const [ maxWidth, setMaxWidth ] = useState( 0 );
 	const shouldRenderFooterAppender = isSelected || isInnerButtonSelected;
@@ -62,24 +66,46 @@ function ButtonsEdit( {
 		isEmbedButton: true,
 	};
 
+	function onChangeContentJustification( updatedValue ) {
+		setAttributes( {
+			contentJustification: updatedValue,
+		} );
+	}
+
 	return (
-		<AlignmentHookSettingsProvider value={ alignmentHooksSetting }>
-			{ resizeObserver }
-			<InnerBlocks
-				allowedBlocks={ ALLOWED_BLOCKS }
-				template={ BUTTONS_TEMPLATE }
-				renderFooterAppender={
-					shouldRenderFooterAppender && renderFooterAppender.current
-				}
-				orientation="horizontal"
-				horizontalAlignment={ align }
-				onDeleteBlock={ shouldDelete ? onDelete : undefined }
-				onAddBlock={ debounceAddNextButton }
-				parentWidth={ maxWidth }
-				marginHorizontal={ spacing }
-				marginVertical={ spacing }
-			/>
-		</AlignmentHookSettingsProvider>
+		<>
+			<BlockControls>
+				<ToolbarGroup>
+					<ToolbarItem>
+						{ ( toggleProps ) => (
+							<ContentJustificationDropdown
+								toggleProps={ toggleProps }
+								value={ contentJustification }
+								onChange={ onChangeContentJustification }
+							/>
+						) }
+					</ToolbarItem>
+				</ToolbarGroup>
+			</BlockControls>
+			<AlignmentHookSettingsProvider value={ alignmentHooksSetting }>
+				{ resizeObserver }
+				<InnerBlocks
+					allowedBlocks={ ALLOWED_BLOCKS }
+					template={ BUTTONS_TEMPLATE }
+					renderFooterAppender={
+						shouldRenderFooterAppender &&
+						renderFooterAppender.current
+					}
+					orientation="horizontal"
+					horizontalAlignment={ contentJustification }
+					onDeleteBlock={ shouldDelete ? onDelete : undefined }
+					onAddBlock={ debounceAddNextButton }
+					parentWidth={ maxWidth }
+					marginHorizontal={ spacing }
+					marginVertical={ spacing }
+				/>
+			</AlignmentHookSettingsProvider>
+		</>
 	);
 }
 
