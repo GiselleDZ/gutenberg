@@ -31,8 +31,6 @@
 	}
 
 	.edit-site-document-actions__title {
-		font-size: $default-font-size;
-		font-weight: bold;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -61,25 +59,10 @@
 			transform: translateY(-14px);
 		}
 
-		.edit-site-document-actions__title {
-			color: $gray-900;
-			font-weight: bold;
-
-			&.is-secondary-title-active {
-				color: $gray-700;
-				font-weight: normal;
-			}
-		}
-
 		.edit-site-document-actions__secondary-item {
 			opacity: 1;
 			white-space: nowrap;
 			transform: translateY(-8px);
-
-			&.is-secondary-title-active {
-				color: $gray-900;
-				font-weight: bold;
-			}
 		}
 	}
 }
